@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentPacientes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PacientesFragment">
+
+    <TextView
+        android:id="@+id/tv_name_ra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/my_name_ra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_titlePacientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/pacientes"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/rg_pacientes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rg_pacientes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="31dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btnBuscarPaciente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/rb_particular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/paciente_particular"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="133dp" />
+
+        <RadioButton
+            android:id="@+id/rb_conveniado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/paciente_conveniado"
+            tools:layout_editor_absoluteX="198dp"
+            tools:layout_editor_absoluteY="133dp" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etCpfCarteirinha"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="23dp"
+        android:ems="10"
+        android:hint="@string/cpf_paciente"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/etNomePaciente"
+        app:layout_constraintEnd_toStartOf="@+id/btnBuscarPaciente"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnBuscarPaciente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="41dp"
+        android:text="@string/buscar"
+        app:layout_constraintBaseline_toBaselineOf="@+id/etCpfCarteirinha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etCpfCarteirinha" />
+
+    <EditText
+        android:id="@+id/etNomePaciente"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="228dp"
+        android:ems="10"
+        android:hint="@string/nome_paciente"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/btnDataNascimento"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@+id/btnDataNascimento"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDataNascimento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="17dp"
+        android:text="@string/nascimento"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnDataNascimento"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNomePaciente" />
+
+    <Button
+        android:id="@+id/btnDataNascimento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
+        android:backgroundTint="@color/material_dynamic_neutral60"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvDataNascimento"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvDataNascimento" />
+
+    <Button
+        android:id="@+id/btnModificarPaciente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="@string/modificar"
+        app:layout_constraintEnd_toEndOf="@+id/btnDataNascimento"
+        app:layout_constraintTop_toBottomOf="@+id/btnDataNascimento" />
+
+    <Button
+        android:id="@+id/btnExcluirPaciente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/excluir"
+        app:layout_constraintStart_toStartOf="@+id/btnInserirPaciente"
+        app:layout_constraintTop_toBottomOf="@+id/btnInserirPaciente" />
+
+    <Button
+        android:id="@+id/btnInserirPaciente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="33dp"
+        android:text="@string/inserir"
+        app:layout_constraintStart_toStartOf="@+id/tvDataNascimento"
+        app:layout_constraintTop_toBottomOf="@+id/tvDataNascimento" />
+
+    <Button
+        android:id="@+id/btnListarPacientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/listar"
+        app:layout_constraintEnd_toEndOf="@+id/btnModificarPaciente"
+        app:layout_constraintTop_toBottomOf="@+id/btnModificarPaciente" />
+
+    <TextView
+        android:id="@+id/tvListarPacientes"
+        android:layout_width="0dp"
+        android:layout_height="220dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ControleMedico</string>
+    <string name="my_name_ra">Gustavo Guimarães de Oliveira | 1110482313013</string>
+    <!--    <string name="my_ra">1110482313013</string>-->
+
+    <string name="inserir">Inserir</string>
+    <string name="modificar">Modificar</string>
+    <string name="excluir">Excluir</string>
+    <string name="listar">Listar</string>
+    <string name="buscar">Buscar</string>
+
+    <string name="agendamento">Agendamento de Consultas</string>
+
+    <string name="consultas">Consultas</string>
+    <string name="pacientes">Pacientes</string>
+    <string name="medicos">Médicos</string>
+
+    <!-- STRINGS DO PACIENTE  -->
+    <string name="paciente_particular">Particular</string>
+    <string name="paciente_conveniado">Conveniado</string>
+    <string name="cpf_paciente">CPF</string>
+    <string name="carteirinha_paciente">Carteirinha</string>
+    <string name="nome_paciente">Nome</string>
+    <string name="nascimento">Data de Nascimento</string>
+    <!-- FIM STRINGS DO PACIENTE  -->
+
+    <!-- STRINGS DO MÉDICO -->
+    <string name="crm_medico">CRM</string>
+    <string name="nome_medico">Nome</string>
+    <string name="espec_medico">Especialidade</string>
+    <!-- FIM STRINGS DO MÉDICO -->
+
+    <!-- STRINGS DAS CONSULTAS -->
+    <string name="cpf_carteirinha">CPF/Carteirinha</string>
+    <string name="btnAgendar">Agendar</string>
+    <!-- FIM STRINGS DAS CONSULTAS -->
+</resources>
