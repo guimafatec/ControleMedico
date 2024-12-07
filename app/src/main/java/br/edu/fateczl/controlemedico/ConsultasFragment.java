@@ -124,6 +124,7 @@ public class ConsultasFragment extends Fragment {
             Consulta consultaSelecionada = (Consulta) spConsultas.getSelectedItem();
             if (consulta == null || consultaSelecionada == null)
                 throw new Exception("Consulta NÃO existe");
+            consulta.setCodigo(consultaSelecionada.getCodigo());
             cCont.modificar(consulta);
             Toast.makeText(view.getContext(), "Consulta ATUALIZADA com sucesso", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
