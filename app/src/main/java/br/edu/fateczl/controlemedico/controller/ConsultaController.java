@@ -1,13 +1,16 @@
 package br.edu.fateczl.controlemedico.controller;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
 import br.edu.fateczl.controlemedico.model.Consulta;
+import br.edu.fateczl.controlemedico.model.Paciente;
 import br.edu.fateczl.controlemedico.persistence.ConsultaDao;
 
 public class ConsultaController implements IController<Consulta> {
+    /*
+     * @author: Gustavo Guimarães de Oliveira
+     */
     private final ConsultaDao cDao;
 
     public ConsultaController(ConsultaDao cDao) {
@@ -55,5 +58,11 @@ public class ConsultaController implements IController<Consulta> {
             cDao.open();
         }
         return cDao.findAll();
+    }
+    public List<Consulta> listarPorPaciente(Paciente paciente) throws SQLException {
+        if (cDao.open() == null) {
+            cDao.open();
+        }
+        return cDao.findByPatient(paciente);
     }
 }

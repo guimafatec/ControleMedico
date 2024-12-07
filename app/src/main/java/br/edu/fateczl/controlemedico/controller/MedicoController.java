@@ -7,6 +7,9 @@ import br.edu.fateczl.controlemedico.model.Medico;
 import br.edu.fateczl.controlemedico.persistence.MedicoDao;
 
 public class MedicoController implements IController<Medico> {
+    /*
+     * @author: Gustavo Guimarães de Oliveira
+     */
     private final MedicoDao mDao;
 
     public MedicoController(MedicoDao pDao) {

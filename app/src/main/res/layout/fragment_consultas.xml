@@ -42,23 +42,20 @@
         android:id="@+id/etIdPaciente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:ems="10"
         android:hint="@string/cpf_carteirinha"
         android:inputType="text"
         app:layout_constraintBaseline_toBaselineOf="@+id/btnBuscarPaciente2"
-        app:layout_constraintEnd_toStartOf="@+id/btnBuscarPaciente2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/tvResultBusca" />
 
     <Button
         android:id="@+id/btnBuscarPaciente2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="38dp"
         android:text="@string/buscar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etIdPaciente"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
@@ -87,12 +84,12 @@
         android:id="@+id/spHorarios"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="99dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnAgendar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDataConsulta" />
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="69dp"
+        app:layout_constraintBottom_toTopOf="@+id/spConsultas"
+        app:layout_constraintEnd_toEndOf="@+id/btnDataConsulta"
+        app:layout_constraintStart_toStartOf="@+id/btnDataConsulta" />
 
     <Spinner
         android:id="@+id/spConsultas"
@@ -100,65 +97,89 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"
         android:layout_marginEnd="38dp"
-        android:layout_marginBottom="304dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnExcluirConsulta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnDataConsulta"
-        android:layout_width="0dp"
+        android:layout_width="140dp"
         android:layout_height="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="138dp"
-        android:layout_marginEnd="89dp"
-        android:layout_marginBottom="137dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginBottom="89dp"
         android:backgroundTint="@color/material_dynamic_neutral60"
-        app:layout_constraintBottom_toTopOf="@+id/btnModificarConsulta"
-        app:layout_constraintEnd_toStartOf="@+id/btnAgendar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etIdPaciente" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvInfoConsulta"
+        app:layout_constraintStart_toStartOf="@+id/spMedico"
+        app:layout_constraintTop_toTopOf="@+id/spEspec" />
 
     <Button
         android:id="@+id/btnAgendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
         android:layout_marginEnd="40dp"
+        android:layout_marginBottom="29dp"
         android:text="@string/btnAgendar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spHorarios"
-        app:layout_constraintTop_toBottomOf="@+id/spMedico" />
-
-    <Button
-        android:id="@+id/btnModificarConsulta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="29dp"
-        android:text="@string/modificar"
-        app:layout_constraintStart_toStartOf="@+id/tvListarConsultas"
-        app:layout_constraintTop_toBottomOf="@+id/spConsultas" />
+        app:layout_constraintBottom_toTopOf="@+id/tvInfoConsulta"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnExcluirConsulta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="9dp"
+        android:layout_marginBottom="219dp"
         android:text="@string/excluir"
-        app:layout_constraintBottom_toTopOf="@+id/tvListarConsultas"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvListarConsultas" />
+
+    <Button
+        android:id="@+id/btnModificarConsulta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/modificar"
+        app:layout_constraintBottom_toTopOf="@+id/tvListarConsultas"
+        app:layout_constraintEnd_toStartOf="@+id/btnExcluirConsulta" />
+
+    <Button
+        android:id="@+id/btnListarConsulta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/listar"
+        app:layout_constraintBottom_toTopOf="@+id/tvListarConsultas"
+        app:layout_constraintEnd_toStartOf="@+id/btnModificarConsulta" />
 
     <TextView
         android:id="@+id/tvListarConsultas"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="7dp"
         android:scrollbars="vertical"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnModificarConsulta" />
+        app:layout_constraintTop_toBottomOf="@+id/btnExcluirConsulta" />
+
+    <TextView
+        android:id="@+id/tvInfoConsulta"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="40dp"
+        android:scrollbars="vertical"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/spConsultas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spHorarios" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

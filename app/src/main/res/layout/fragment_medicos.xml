@@ -5,7 +5,9 @@
     android:id="@+id/fragmentMedicos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MedicosFragment">
+    tools:context=".MedicosFragment"
+    tools:layout_editor_absoluteX="2dp"
+    tools:layout_editor_absoluteY="-35dp">
 
     <TextView
         android:id="@+id/tv_name_ra2"
@@ -21,73 +23,80 @@
         android:id="@+id/tv_titleMedicos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="18dp"
         android:text="@string/medicos"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/etCrmMedico"
         app:layout_constraintTop_toBottomOf="@+id/tv_name_ra2" />
 
-    <EditText
-        android:id="@+id/etCrmMedico"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="18dp"
-        android:ems="10"
-        android:hint="@string/crm_medico"
-        android:inputType="text"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnBuscarMedico"
-        app:layout_constraintEnd_toStartOf="@+id/btnBuscarMedico"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/btnBuscarMedico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="18dp"
         android:text="@string/buscar"
+        app:layout_constraintBaseline_toBaselineOf="@+id/etCrmMedico"
+        app:layout_constraintEnd_toEndOf="@+id/etNomeMedico" />
+
+    <EditText
+        android:id="@+id/etCrmMedico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="@string/crm_medico"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/etNomeMedico"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etCrmMedico" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etNomeMedico"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="183dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginTop="134dp"
         android:ems="10"
         android:hint="@string/nome_medico"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/btnExcluirMedico"
         app:layout_constraintEnd_toEndOf="@+id/etEspecMedico"
-        app:layout_constraintStart_toStartOf="@+id/etEspecMedico"
-        app:layout_constraintTop_toTopOf="@+id/tv_name_ra2" />
+        app:layout_constraintStart_toStartOf="@+id/etCrmMedico"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etEspecMedico"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="37dp"
+        android:layout_marginTop="21dp"
         android:ems="10"
         android:hint="@string/espec_medico"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/etValorConsulta"
+        app:layout_constraintStart_toStartOf="@+id/etValorConsulta"
+        app:layout_constraintTop_toBottomOf="@+id/etNomeMedico" />
+
+    <EditText
+        android:id="@+id/etValorConsulta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="33dp"
+        android:ems="10"
+        android:hint="@string/valor_consula"
+        android:inputType="number|numberDecimal|numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNomeMedico" />
+        app:layout_constraintTop_toBottomOf="@+id/etEspecMedico" />
 
     <Button
         android:id="@+id/btnInserirMedico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="34dp"
         android:text="@string/inserir"
-        app:layout_constraintStart_toStartOf="@+id/etEspecMedico"
-        app:layout_constraintTop_toBottomOf="@+id/etEspecMedico" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etValorConsulta" />
 
     <Button
         android:id="@+id/btnExcluirMedico"
@@ -103,26 +112,28 @@
         android:id="@+id/btnModificarMedico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="53dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="19dp"
         android:text="@string/modificar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEspecMedico" />
+        app:layout_constraintEnd_toEndOf="@+id/etValorConsulta"
+        app:layout_constraintTop_toBottomOf="@+id/etValorConsulta" />
 
     <Button
         android:id="@+id/btnListarMedicos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="53dp"
+        android:layout_marginEnd="18dp"
         android:layout_marginBottom="35dp"
         android:text="@string/listar"
         app:layout_constraintBottom_toTopOf="@+id/tvListarMedicos"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/tvListarMedicos" />
 
     <TextView
         android:id="@+id/tvListarMedicos"
         android:layout_width="0dp"
         android:layout_height="220dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

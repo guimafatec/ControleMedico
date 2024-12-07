@@ -2,26 +2,31 @@ package br.edu.fateczl.controlemedico;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import br.edu.fateczl.controlemedico.controller.PacienteController;
 import br.edu.fateczl.controlemedico.model.Paciente;
@@ -53,10 +58,8 @@ public class PacientesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_pacientes, container, false);
-        initDatePicker();
         btnDataNascimento = view.findViewById(R.id.btnDataNascimento);
-        btnDataNascimento.setText(getMaxDate());
-        btnDataNascimento.setOnClickListener(op -> openDatePicker(view));
+        initDatePicker();
 
 
         rg_pacientes = view.findViewById(R.id.rg_pacientes);
@@ -88,9 +91,10 @@ public class PacientesFragment extends Fragment {
     private void inserir() {
         Paciente paciente = montaPaciente();
         try {
+            if (paciente == null) throw new Exception("Preencher CPF/Carteirinha");
             pCont.inserir(paciente);
             Toast.makeText(view.getContext(), "Paciente INSERIDO com sucesso", Toast.LENGTH_LONG).show();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
         limpaCampos();
@@ -99,9 +103,10 @@ public class PacientesFragment extends Fragment {
     private void modificar() {
         Paciente paciente = montaPaciente();
         try {
+            if (paciente == null) throw new Exception("Preencher CPF/Carteirinha");
             pCont.modificar(paciente);
             Toast.makeText(view.getContext(), "Paciente ATUALIZADO com sucesso", Toast.LENGTH_LONG).show();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
         limpaCampos();
@@ -110,9 +115,10 @@ public class PacientesFragment extends Fragment {
     private void excluir() {
         Paciente paciente = montaPaciente();
         try {
+            if (paciente == null) throw new Exception("Preencher CPF/Carteirinha");
             pCont.deletar(paciente);
             Toast.makeText(view.getContext(), "Paciente EXCLUÍDO com sucesso", Toast.LENGTH_LONG).show();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
         limpaCampos();
@@ -121,15 +127,16 @@ public class PacientesFragment extends Fragment {
     private void buscar() {
         Paciente paciente = montaPaciente();
         try {
+            if (paciente == null) throw new Exception("Preencher CPF/Carteirinha");
             Paciente buscar = pCont.buscar(paciente);
-            if (buscar.getNome() != null) {
+            if (buscar != null) {
                 System.out.println(paciente.toString());
-                preencheCampos(paciente);
+                preencheCampos(buscar);
             } else {
                 Toast.makeText(view.getContext(), "Paciente NÃO encontrado", Toast.LENGTH_LONG).show();
                 limpaCampos();
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
@@ -139,7 +146,7 @@ public class PacientesFragment extends Fragment {
         try {
             List<Paciente> pacientes = pCont.listar();
             StringBuffer buffer = new StringBuffer();
-            for (Paciente t: pacientes) {
+            for (Paciente t : pacientes) {
                 buffer.append(t.toString() + "\n");
             }
             tvListarPacientes.setText(buffer.toString());
@@ -149,16 +156,18 @@ public class PacientesFragment extends Fragment {
     }
 
     private Paciente montaPaciente() {
-        Paciente paciente;
-        if (rb_conveniado.isChecked()){
-            paciente = new PacienteConveniado();
-        } else {
-            paciente = new PacienteParticular();
+        Paciente paciente = null;
+        String idPaciente = etCpfCarteirinha.getText().toString();
+        if (!idPaciente.isBlank()) {
+            if (rb_conveniado.isChecked()) {
+                paciente = new PacienteConveniado();
+            } else {
+                paciente = new PacienteParticular();
+            }
+            paciente.setId(idPaciente);
+            paciente.setNome(etNomePaciente.getText().toString());
+            paciente.setDataNascimento(btnDataNascimento.getText().toString());
         }
-        paciente.setId(etCpfCarteirinha.getText().toString());
-        paciente.setNome(etNomePaciente.getText().toString());
-        paciente.setDataNascimento(btnDataNascimento.getText().toString());
-
         return paciente;
     }
 
@@ -173,10 +182,11 @@ public class PacientesFragment extends Fragment {
         }
     }
 
-    private void limpaCampos(){
+    private void limpaCampos() {
         etCpfCarteirinha.setText("");
         etNomePaciente.setText("");
     }
+
     private String getMaxDate() {
         LocalDate today = LocalDate.now();
         today = today.minusYears(18);
@@ -187,25 +197,43 @@ public class PacientesFragment extends Fragment {
     }
 
     private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        btnDataNascimento.setText(getMaxDate());
+        // Configuração de restrições para a data (Data de nascimento com idade mínima de 18 anos)
+        TimeZone timeZoneUTC3 = TimeZone.getTimeZone("America/Sao_Paulo");
+        Calendar calendar = Calendar.getInstance();
+        LocalDate today = LocalDate.now();
+        LocalDate eighteenYearsAgo = today.minusYears(18);
+        calendar.set(eighteenYearsAgo.getYear(), eighteenYearsAgo.getMonthValue() - 1, eighteenYearsAgo.getDayOfMonth());
+        long maxDate = calendar.getTimeInMillis();
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder().setEnd(maxDate);
+
+        btnDataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = String.format("%02d/%02d/%04d", dayOfMonth, month, year);
-                btnDataNascimento.setText(date);
+            public void onClick(View v) {
+                MaterialDatePicker<Long> selectDate = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Data de Nascimento")
+                        .setCalendarConstraints(constraintsBuilder.build())
+                        .setSelection(calendar.getTimeInMillis())
+                        .build();
+                selectDate.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        long selectionUTC_3 = selection - timeZoneUTC3.getOffset(selection);
+
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        DateTimeFormatter dtFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        String formattedDate = simpleDateFormat.format(selectionUTC_3);
+                        LocalDate date = LocalDate.parse(formattedDate, dtFmt);
+                        if (date.isAfter(eighteenYearsAgo)) {
+                            date = eighteenYearsAgo;
+                        }
+
+                        btnDataNascimento.setText(date.format(dtFmt));
+                    }
+                });
+                selectDate.show(getActivity().getSupportFragmentManager(), "tag");
             }
-        };
-
-        LocalDateTime today = LocalDateTime.now();
-        today = today.minusYears(18);
-        int year = today.getYear();
-        int month = today.getMonthValue();
-        int day = today.getDayOfMonth();
-
-        int style = 3;
-        datePickerDialog = new DatePickerDialog(this.getContext(), style, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMaxDate(today.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-
+        });
     }
 
     private void openDatePicker(View view) {

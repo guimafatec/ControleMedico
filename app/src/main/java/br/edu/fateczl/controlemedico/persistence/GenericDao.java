@@ -9,7 +9,7 @@ public class GenericDao extends SQLiteOpenHelper {
      * @author: Gustavo Guimarães de Oliveira
      */
     private static final String DATABASE = "CONSULTORIO";
-    private static final int DATABASE_VER = 1;
+    private static final int DATABASE_VER = 4;
     private final String CREATE_TABLE_PACIENTE =
             "CREATE TABLE paciente ( " +
                 "id TEXT NOT NULL PRIMARY KEY, " +
@@ -21,7 +21,8 @@ public class GenericDao extends SQLiteOpenHelper {
             "CREATE TABLE medico ( " +
                 "crm TEXT NOT NULL PRIMARY KEY, " +
                 "nome TEXT NOT NULL, " +
-                "especialidade TEXT NOT NULL " +
+                "especialidade TEXT NOT NULL ," +
+                "valor_consulta FLOAT NOT NULL" +
             ")";
     private final String CREATE_TABLE_CONSULTA =
             "CREATE TABLE consulta ( " +
@@ -29,6 +30,7 @@ public class GenericDao extends SQLiteOpenHelper {
                 "data TEXT NOT NULL, " +
                 "crm_medico TEXT NOT NULL, " +
                 "id_paciente TEXT NOT NULL, " +
+                "valor REAL NOT NULL, " +
                 "FOREIGN KEY (crm_medico) REFERENCES medico(crm), " +
                 "FOREIGN KEY (id_paciente) REFERENCES paciente(id) " +
             ")";

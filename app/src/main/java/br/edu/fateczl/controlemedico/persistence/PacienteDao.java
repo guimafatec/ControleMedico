@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +47,12 @@ public class PacienteDao implements IPacienteDao, ICRUDDao<Paciente> {
     @Override
     public int update(Paciente paciente) throws SQLException {
         ContentValues contentValues = getContentValues(paciente);
-        return db.update("paciente", contentValues, "id = " + paciente.getId(), null);
+        return db.update("paciente", contentValues, "id = '" + paciente.getId() + "'", null);
     }
 
     @Override
     public void delete(Paciente paciente) throws SQLException {
-        db.delete("paciente", "id = " + paciente.getId(), null);
+        db.delete("paciente", "id = '" + paciente.getId() + "'", null);
     }
 
     @SuppressLint("Range")
@@ -61,12 +60,20 @@ public class PacienteDao implements IPacienteDao, ICRUDDao<Paciente> {
     public Paciente findOne(Paciente paciente) throws SQLException {
         String sql = "SELECT id, tipo, nome, data_nascimento FROM paciente WHERE id = '" + paciente.getId() + "'";
         Cursor cursor = db.rawQuery(sql, null);
+        paciente = null;
         if (cursor != null) {
             cursor.moveToFirst();
         }
         if (!cursor.isAfterLast()) {
+            String tipo = cursor.getString(cursor.getColumnIndex("tipo"));
+            if (tipo.equals("P")) {
+                paciente = new PacienteParticular();
+            }
+            else {
+                paciente = new PacienteConveniado();
+            }
+            paciente.setTipo(tipo);
             paciente.setId(String.valueOf(cursor.getInt(cursor.getColumnIndex("id"))));
-            paciente.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
             paciente.setNome(cursor.getString(cursor.getColumnIndex("nome")));
             String dataNascimento = cursor.getString(cursor.getColumnIndex("data_nascimento"));
             paciente.setDataNascimento(dataNascimento);
@@ -74,6 +81,33 @@ public class PacienteDao implements IPacienteDao, ICRUDDao<Paciente> {
         cursor.close();
         return paciente;
 
+    }
+
+    @SuppressLint("Range")
+    public Paciente findOne(String id) {
+        String sql = "SELECT id, tipo, nome, data_nascimento FROM paciente WHERE id = '" + id + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+        Paciente paciente = null;
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        if (!cursor.isAfterLast()) {
+            String tipo = cursor.getString(cursor.getColumnIndex("tipo"));
+
+            if (tipo.equals("P")) {
+                paciente = new PacienteParticular();
+            }
+            else {
+                paciente = new PacienteConveniado();
+            }
+            paciente.setId(String.valueOf(cursor.getInt(cursor.getColumnIndex("id"))));
+            paciente.setTipo(tipo);
+            paciente.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            String dataNascimento = cursor.getString(cursor.getColumnIndex("data_nascimento"));
+            paciente.setDataNascimento(dataNascimento);
+        }
+        cursor.close();
+        return paciente;
     }
 
     @SuppressLint("Range")
@@ -115,4 +149,6 @@ public class PacienteDao implements IPacienteDao, ICRUDDao<Paciente> {
         contentValues.put("data_nascimento", paciente.getDataNascimento().toString());
         return contentValues;
     }
+
+
 }

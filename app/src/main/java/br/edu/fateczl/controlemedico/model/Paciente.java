@@ -2,9 +2,7 @@ package br.edu.fateczl.controlemedico.model;
 
 import androidx.annotation.NonNull;
 
-import java.time.LocalDate;
-
-public class Paciente {
+public abstract class Paciente {
     /*
      * @author: Gustavo Guimarães de Oliveira
      */
@@ -12,10 +10,13 @@ public class Paciente {
     private String nome;
     private String dataNascimento;
     private String tipo;
-    public Paciente() {super();}
+
+    public Paciente() {
+        super();
+    }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -46,9 +47,10 @@ public class Paciente {
         this.tipo = tipo;
     }
 
+
     @NonNull
     @Override
     public String toString() {
-        return String.format("%s - %s - %s", this.getId(), this.getNome(), this.getDataNascimento());
+        return String.format("%s - %s - %s - %s", this.getId(), this.getNome(), this.getTipo(), this.getDataNascimento());
     }
 }

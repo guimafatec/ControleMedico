@@ -28,10 +28,12 @@
     <string name="crm_medico">CRM</string>
     <string name="nome_medico">Nome</string>
     <string name="espec_medico">Especialidade</string>
+    <string name="valor_consula">Valor da Consulta</string>
     <!-- FIM STRINGS DO MÉDICO -->
 
     <!-- STRINGS DAS CONSULTAS -->
     <string name="cpf_carteirinha">CPF/Carteirinha</string>
     <string name="btnAgendar">Agendar</string>
+    <string name="btnListarConsultas">Listar</string>
     <!-- FIM STRINGS DAS CONSULTAS -->
 </resources>

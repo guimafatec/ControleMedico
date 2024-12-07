@@ -9,6 +9,7 @@ public class Medico {
     private String crm;
     private String nome;
     private String especialidade;
+    private float valorConsulta;
 
     public Medico() {
         super();
@@ -38,9 +39,17 @@ public class Medico {
         this.especialidade = especialidade;
     }
 
+    public float getValorConsulta() {
+        return valorConsulta;
+    }
+
+    public void setValorConsulta(float valorConsulta) {
+        this.valorConsulta = valorConsulta;
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return String.format("Dr./Dra. %s - %s - CRM: %s", nome, especialidade, crm);
+        return String.format("Dr(a). %s - %s - CRM: %s - R$%.2f", nome, especialidade, crm, valorConsulta);
     }
 }

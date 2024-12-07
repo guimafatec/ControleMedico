@@ -58,17 +58,21 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
     @Override
     public Medico findOne(Medico medico) throws SQLException {
         String where = String.format("WHERE crm = '%s'", medico.getCrm());
-        String sql = "SELECT crm, nome, especialidade FROM medico " + where;
+        String sql = "SELECT crm, nome, especialidade, valor_consulta FROM medico " + where;
         Cursor cursor = db.rawQuery(sql, null);
+        medico = null;
         if (cursor != null) {
             cursor.moveToFirst();
         }
         if (!cursor.isAfterLast()) {
+            medico = new Medico();
             medico.setCrm(cursor.getString(cursor.getColumnIndex("crm")));
             medico.setNome(cursor.getString(cursor.getColumnIndex("nome")));
             medico.setEspecialidade(cursor.getString(cursor.getColumnIndex("especialidade")));
+            medico.setValorConsulta(cursor.getFloat(cursor.getColumnIndex("valor_consulta")));
         }
         cursor.close();
+        System.out.println("MEULOG: MedicoDao - findOne(): " + medico);
         return medico;
     }
 
@@ -76,7 +80,7 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
     @Override
     public List<Medico> findAll() throws SQLException {
         List<Medico> medicos = new ArrayList<>();
-        String sql = "SELECT crm, nome, especialidade FROM medico";
+        String sql = "SELECT crm, nome, especialidade, valor_consulta FROM medico";
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -86,6 +90,7 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
             medico.setCrm(cursor.getString(cursor.getColumnIndex("crm")));
             medico.setNome(cursor.getString(cursor.getColumnIndex("nome")));
             medico.setEspecialidade(cursor.getString(cursor.getColumnIndex("especialidade")));
+            medico.setValorConsulta(cursor.getFloat(cursor.getColumnIndex("valor_consulta")));
 
             medicos.add(medico);
             cursor.moveToNext();
@@ -116,8 +121,8 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
     @SuppressLint("Range")
     public List<Medico> getDoctorListBySpeciality(String spec) throws SQLException {
         List<Medico> medicos = new ArrayList<>();
-        String sql = "SELECT cQuery(sql, rm, nome, especialidade FROM medico WHERE especialidade = '" + spec + "'";
-                Cursor cursor = db.rawnull);
+        String sql = "SELECT crm, nome, especialidade, valor_consulta FROM medico WHERE especialidade = '" + spec + "'";
+                Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -126,6 +131,7 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
             medico.setCrm(cursor.getString(cursor.getColumnIndex("crm")));
             medico.setNome(cursor.getString(cursor.getColumnIndex("nome")));
             medico.setEspecialidade(cursor.getString(cursor.getColumnIndex("especialidade")));
+            medico.setValorConsulta(cursor.getFloat(cursor.getColumnIndex("valor_consulta")));
 
             medicos.add(medico);
             cursor.moveToNext();
@@ -138,6 +144,7 @@ public class MedicoDao implements IMedicoDao, ICRUDDao<Medico> {
         contentValues.put("crm", medico.getCrm());
         contentValues.put("nome", medico.getNome());
         contentValues.put("especialidade", medico.getEspecialidade());
+        contentValues.put("valor_consulta", medico.getValorConsulta());
         return contentValues;
     }
 }
