@@ -147,6 +147,7 @@ public class ConsultaDao implements IConsultaDao, ICRUDDao<Consulta> {
         cursor.close();
         return consultas;
     }
+
     @SuppressLint("Range")
     public List<Consulta> findByPatient(Paciente buscPaciente) throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
@@ -192,6 +193,29 @@ public class ConsultaDao implements IConsultaDao, ICRUDDao<Consulta> {
         }
         cursor.close();
         return consultas;
+    }
+
+    @SuppressLint("Range")
+    public List<String> findSchedules(Medico medico, String data) {
+        List<String> agendas = new ArrayList<>();
+        String sql = "SELECT " +
+                "a.data, a.crm_medico, c.crm, c.nome as nm_medico " +
+                "FROM consulta a " +
+                "INNER JOIN medico c " +
+                "ON a.crm_medico = c.crm " +
+                "WHERE c.crm = '" + medico.getCrm() + "' " +
+                "AND SUBSTR(a.data, 1, 10) = '" + data + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        while (!cursor.isAfterLast()) {
+            String dataCol = cursor.getString(cursor.getColumnIndex("data"));
+            agendas.add(dataCol);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return agendas;
     }
 
     private ContentValues getContentValues(Consulta consulta) {

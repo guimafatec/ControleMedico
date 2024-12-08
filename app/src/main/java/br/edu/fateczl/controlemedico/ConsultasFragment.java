@@ -107,9 +107,11 @@ public class ConsultasFragment extends Fragment {
     }
 
     private void inserir() {
-        boolean valid = validarPreenchimento();
         try {
+            boolean valid = validarPreenchimento();
             if (!valid) throw new Exception("Preencha TODOS os campos");
+            valid = validarDataConsulta();
+            if (!valid) throw new Exception("Data deve ser futura");
             Consulta consulta = montaConsulta();
             cCont.inserir(consulta);
             Toast.makeText(view.getContext(), "Consulta INSERIDA com sucesso", Toast.LENGTH_SHORT).show();
@@ -122,8 +124,7 @@ public class ConsultasFragment extends Fragment {
         try {
             Consulta consulta = montaConsulta();
             Consulta consultaSelecionada = (Consulta) spConsultas.getSelectedItem();
-            if (consulta == null || consultaSelecionada == null)
-                throw new Exception("Consulta NÃO existe");
+            if (consulta == null || consultaSelecionada == null) throw new Exception("Consulta NÃO existe");
             consulta.setCodigo(consultaSelecionada.getCodigo());
             cCont.modificar(consulta);
             Toast.makeText(view.getContext(), "Consulta ATUALIZADA com sucesso", Toast.LENGTH_SHORT).show();
@@ -141,7 +142,7 @@ public class ConsultasFragment extends Fragment {
                 throw new Exception("Consulta NÃO existe");
             consulta.setCodigo(consultaSelecionada.getCodigo());
             cCont.deletar(consulta);
-            Toast.makeText(view.getContext(), "Consulta ATUALIZADA com sucesso", Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "Consulta EXCLUÍDA com sucesso", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             System.err.println("MEULOG: " + e.getMessage());
             Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -195,43 +196,47 @@ public class ConsultasFragment extends Fragment {
         spConsultas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Consulta consulta = (Consulta) spConsultas.getSelectedItem();
-                ArrayAdapter<String> especAdapter = (ArrayAdapter<String>) spEspec.getAdapter();
-                int totalEspec = especAdapter.getCount();
-                for (int i = 0; i < totalEspec; i++) {
-                    if (especAdapter.getItem(i).equals(consulta.getMedico().getEspecialidade())) {
-                        spEspec.setSelection(i);
-                        break;
-                    }
-                }
-                ArrayAdapter<Medico> medicoAdapter = (ArrayAdapter<Medico>) spMedico.getAdapter();
-                int totalMedico = medicoAdapter.getCount();
-                for (int i = 0; i < totalMedico; i++) {
-                    if (medicoAdapter.getItem(i).equals(consulta.getMedico())) {
-                        spMedico.setSelection(i);
-                        break;
-                    }
-                }
-                String dhConsulta = consulta.getFmtDhConsulta();
-                String data = dhConsulta.split(" ")[0];
-                String hora = dhConsulta.split(" ")[1];
-
-                btnDataConsulta.setText(data);
-
-                ArrayAdapter<String> horaAdapter = (ArrayAdapter<String>) spHorarios.getAdapter();
-                int totalHoras = horaAdapter.getCount();
-                for (int i = 0; i < totalHoras; i++) {
-                    if (horaAdapter.getItem(i).equals(hora)) {
-                        spHorarios.setSelection(i);
-                        break;
-                    }
-                }
+                preencheCampos();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private void preencheCampos() {
+        Consulta consulta = (Consulta) spConsultas.getSelectedItem();
+        ArrayAdapter<String> especAdapter = (ArrayAdapter<String>) spEspec.getAdapter();
+        int totalEspec = especAdapter.getCount();
+        for (int i = 0; i < totalEspec; i++) {
+            if (especAdapter.getItem(i).equals(consulta.getMedico().getEspecialidade())) {
+                spEspec.setSelection(i);
+                break;
+            }
+        }
+        ArrayAdapter<Medico> medicoAdapter = (ArrayAdapter<Medico>) spMedico.getAdapter();
+        int totalMedico = medicoAdapter.getCount();
+        for (int i = 0; i < totalMedico; i++) {
+            if (medicoAdapter.getItem(i).equals(consulta.getMedico())) {
+                spMedico.setSelection(i);
+                break;
+            }
+        }
+        String dhConsulta = consulta.getFmtDhConsulta();
+        String data = dhConsulta.split(" ")[0];
+        String hora = dhConsulta.split(" ")[1];
+
+        btnDataConsulta.setText(data);
+
+        ArrayAdapter<String> horaAdapter = (ArrayAdapter<String>) spHorarios.getAdapter();
+        int totalHoras = horaAdapter.getCount();
+        for (int i = 0; i < totalHoras; i++) {
+            if (horaAdapter.getItem(i).equals(hora)) {
+                spHorarios.setSelection(i);
+                break;
+            }
+        }
     }
 
     private void spinnerEspec() {
@@ -271,12 +276,46 @@ public class ConsultasFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 atualizaInfoConsulta();
+                atualizaHorarios();
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    private void atualizaHorarios() {
+        try {
+            Medico medico = (Medico) spMedico.getSelectedItem();
+            if (medico == null) throw new Exception("Médico NÃO encontrado");
+            String data = btnDataConsulta.getText().toString();
+            List<String> agendasDoMedico = cCont.listarAgendasDoMedico(medico, data);
+            List<String> horarios = new ArrayList<>();
+            spinnerHorarios();
+            ArrayAdapter<String> horariosAdapter = (ArrayAdapter<String>) spHorarios.getAdapter();
+            int totalHorarios = horariosAdapter.getCount();
+            System.out.print("MEULOG: Horários: ");
+            for (int i = 0; i < totalHorarios; i++) {
+                System.out.print(horariosAdapter.getItem(i) + " ");
+                horarios.add(horariosAdapter.getItem(i));
+            }
+            totalHorarios = horarios.size();
+            for (int i = 0; i < totalHorarios; i++) {
+                for (String agenda: agendasDoMedico) {
+                    String hora = agenda.split(" ")[1];
+                    if (hora.equals(horarios.get(i))) {
+                        System.out.println("MEULOG: Agenda do Médico: " + agenda);
+                        horarios.remove(i);
+                        totalHorarios--;
+                        break;
+                    }
+                }
+            }
+            horariosAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_spinner_item, horarios);
+            horariosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spHorarios.setAdapter(horariosAdapter);
+        } catch (Exception e) {
+            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void atualizaInfoConsulta() {
@@ -287,7 +326,6 @@ public class ConsultasFragment extends Fragment {
             tvInfoConsulta.setText(consulta.description());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-//            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -325,6 +363,17 @@ public class ConsultasFragment extends Fragment {
                 (!especSelected.equals("Selecione uma especialidade")) &&
                 (medicoSelected != null);
         return valid;
+    }
+
+    private boolean validarDataConsulta() {
+        String dataConsulta = btnDataConsulta.getText().toString();
+        DateTimeFormatter dtFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dtConsulta = LocalDate.parse(dataConsulta, dtFmt);
+        LocalDate today = LocalDate.now();
+        if (dtConsulta.isBefore(today) || dtConsulta.equals(today)) {
+            return false;
+        }
+        return true;
     }
 
     private Consulta montaConsulta() {
@@ -400,6 +449,7 @@ public class ConsultasFragment extends Fragment {
 
                         btnDataConsulta.setText(date.format(dtFmt));
                         atualizaInfoConsulta();
+                        atualizaHorarios();
                     }
                 });
                 selectDate.show(getActivity().getSupportFragmentManager(), "tag");

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import br.edu.fateczl.controlemedico.model.Consulta;
+import br.edu.fateczl.controlemedico.model.Medico;
 import br.edu.fateczl.controlemedico.model.Paciente;
 import br.edu.fateczl.controlemedico.persistence.ConsultaDao;
 
@@ -64,5 +65,12 @@ public class ConsultaController implements IController<Consulta> {
             cDao.open();
         }
         return cDao.findByPatient(paciente);
+    }
+
+    public List<String> listarAgendasDoMedico(Medico medico, String data) throws SQLException{
+        if (cDao.open() == null) {
+            cDao.open();
+        }
+        return cDao.findSchedules(medico, data);
     }
 }
